@@ -1,0 +1,39 @@
+<ion-view view-title="Competition Detail" cache-view="false">
+<!-- Back Button -->
+<ion-nav-buttons side="left">
+<button class="button button-clear icon-button mdi mdi-chevron-left" ng-click="backToCompetition()" style="font-size:25px"></button>
+</ion-nav-buttons>
+<ion-nav-buttons side="right">
+<a class="button button-clear" ng-href="#/app/edit_profile"><i class="mdi mdi-settings padding"></i></a>
+</ion-nav-buttons>
+<!-- Shadow space -->
+<div class="bar item-input-inset" style="border:none;box-shadow: 0 1px 2px #aaa"></div>
+<ion-content overflow-scroll=false data-tap-disabled="true" style="background-color: #ffffff;">
+<div style="background-color:white;height:270px;padding-top:15px;background-repeat:no-repeat;">
+  <center>
+    <div style="width:60px;height:25px;background-color:#4db6ac;padding-top:4px;margin-top:20px;">
+      <p style="color:#ffffff; text-align:center; font-size:16px;">0</p>
+    </div>
+  <center>
+  <div style="width:60px;height:50px;background-color:#ffffff;padding-top:4px;border:1px solid #d1d0d0;">
+    <p style="color:#444; text-align:center; font-size:16px; margin:0px;">{{competition.comp_teams}}</p>
+    <p style="color:#444; text-align:center; font-size:16px; margin:0px;">Teams</p>
+  </div>
+  <h1 style="color:#777474; margin-top:15px; text-align:center; font-size:21px;padding:0px;margin-bottom:0px;">{{competition.comp_name}}</h1>
+  <p style="color:#6c6868; text-align:center; font-size:14px;margin-bottom:0px;">{{competition.comp_location}}</p>
+  <p style="color:#6c6868; text-align:center; font-size:14px;">{{competition.comp_start | date:'dd MMM yy'}} - {{competition.comp_finish | date:'dd MMM yy'}}</p>  
+  <center><button class="button button-balanced" style="margin-top:0px;">Register</button></center>
+</div>
+<ng-map center="current-location" zoom="18" style="height:250px;">
+   <!--  <marker position="jalan kebon mangga 11" on-click="myfunc()"></div> -->
+      <directions
+         draggable="true"
+         panel="directions-panel"
+         travel-mode="DRIVING"
+         origin="current-location"
+         destination={{competition.comp_location}}>
+      </directions>
+</ng-map>
+<!-- <div style="background-color:white;height:200px;padding-top:15px;background-repeat:no-repeat;"> -->
+</ion-content>
+</ion-view>

@@ -1,0 +1,54 @@
+<ion-side-menus enable-menu-with-back-views="true">
+	<ion-side-menu-content>
+		<ion-nav-bar class="bar-calm-900">
+			<ion-nav-buttons side="left">
+				<button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+				</button>
+			</ion-nav-buttons>
+		</ion-nav-bar>
+		<ion-nav-view name="home"></ion-nav-view>
+	</ion-side-menu-content>
+	<ion-side-menu side="left">
+		<!-- Account infromation -->
+		<ion-header-bar class="expanded bar bar-header disable-user-behavior sidemenu-header">
+			<a ng-href="#/app/profile" menu-close="" style="color:inherit;">
+				<img ng-src={{menuProfile.photo}} src="img/profile2.png" class="avatar motion">
+				<div class="menu-bottom">
+					<p class="sidemenu-nama" style=" margin-left:4px; font-weight:bold;text-align: left; font-size:16px;">{{menuProfile.username}}</p>
+					<p class="sidemenu-nama" style="font-size:15px; margin-left:4px;">{{menuProfile.email}}</p>
+				</div>
+			</a>
+		</ion-header-bar>
+		<!-- Tab menu -->
+		<ion-content class="has-expanded-header scroll-content ionic-scroll has-header sidemenu-content" style="overflow-y:hidden;">
+			<ion-list class="disable-user-behavior">
+				<div class="list side-menu">
+					<ion-item class="item item-complex" nav-clear="" menu-close="" ng-href="#/app/home">
+						<i class="mdi mdi-clock" style="margin-right:10px; font-size:18px;"></i>   Home
+					</ion-item>
+					<ion-item class="item item-complex" nav-clear="" menu-close="" ng-href="#/app/chat">
+						<i class="mdi mdi-message" style="margin-right:10px; font-size:18px;"></i>   Chat
+					</ion-item>
+					<ion-item class="item item-complex" nav-clear="" menu-close="" ng-href="#/app/profile">
+						<i class="mdi mdi-account" style="margin-right:10px; font-size:20px;"></i>   Profile
+					</ion-item>
+					<ion-item class="item item-complex" nav-clear="" menu-close="" ng-href="#/app/competition">
+						<i class="mdi mdi-trophy-variant" style="margin-right:10px; font-size:20px;"></i> Competition
+					</ion-item>
+					<ion-item class="item item-complex" nav-clear="" menu-close="" ng-href="#/app/my_team">
+						<i class="mdi mdi-account-multiple" style="margin-right:10px; font-size:20px;"></i>   Team
+					</ion-item>
+					<ion-item class="item item-complex" nav-clear="" menu-close="" ng-href="#/app/my_team">
+						<i class="mdi mdi-calendar" style="margin-right:10px; font-size:20px;"></i>   Schedule
+					</ion-item>
+					<ion-item class="item item-complex" nav-clear="" menu-close="" ng-href="#/app/about">
+						<i class="mdi mdi-help-circle" style="margin-right:10px; font-size:20px;"></i>   About
+					</ion-item>
+					<ion-item class="item item-complex" nav-clear="" menu-close="" ng-href="" ng-click="logout()">
+						<i class="mdi mdi-logout" style="margin-right:10px; font-size:20px;"></i>    Logout
+					</ion-item>
+				</div>
+			</ion-list>
+		</ion-content>
+	</ion-side-menu>
+</ion-side-menus>

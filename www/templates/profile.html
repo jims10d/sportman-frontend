@@ -1,0 +1,46 @@
+<ion-view view-title="Profile" cache-view="true">
+<ion-nav-buttons side="right">
+<a class="button button-clear" ng-href="#/app/edit_profile"><i class="mdi mdi-settings padding"></i></a>
+</ion-nav-buttons>
+<!-- Shadow space -->
+<div class="bar item-input-inset" style="border:none;box-shadow: 0 1px 2px #aaa"></div>
+<ion-content overflow-scroll=true scroll-sista="tabs" style="background-color: #ececec;">
+<div style="background-image: url('img/background-leaderboard.png');height:250px;padding-top:15px;background-repeat:no-repeat;">
+  <img src="img/profile2.png" ng-src={{profile.photo}} class="avatar" style="left:0px;right:0px;top:30px;margin:0px auto;width:80px;height:80px;">
+  <h1 style="color:white; margin-top:100px; text-align:center; font-size:18px;">{{profile.username}}</h1>
+  <p style="color:#ececec; text-align:center; font-size:12px;">{{profile.email}}</p>
+  <p style="color:#ececec; text-align:center; font-size:12px;">{{profile.poin}} poin</p>  
+  <p style="color:#ececec; text-align:center; font-size:12px;">{{profile.status_badge}}</p>
+  <!-- Change password link -->
+  <p style="text-align:center; font-size:12px;"><a style="text-decoration:none;color:#ececec;" ng-href="#/app/change_password"><i class="mdi mdi-lock"></i> Change Password </a></p> 
+</div>
+<div class="card" style="margin-left:30px; margin-right:30px; margin-top:-15px;">
+  <div class="item item-text-wrap">
+    <p>Bio</p>
+    {{profile.bio}}"I am using Sportman"<br/>
+    <a href="{{profile.link}}" ng-hide="profile.link=='Kosong'">{{profile.link}}</a>
+  </div>
+</div>
+<!-- Badges box -->
+<div class="card" style="margin-left:30px; margin-right:30px;">
+  <div class="item item-text-wrap">
+    <p>Badges</p>
+    <div class="row">
+      <div class="col disable" ng-click="seenStory()"><img src="img/award/seen-story/bronze.png"></div>
+      <div class="col disable" ng-click="like()"><img src="img/award/like/bronze.png"></div>
+      <div class="col disable" ng-click="comment()"><img src="img/award/comment/bronze.png"></div>
+      <div class="col disable" ng-click="share()"><img src="img/award/share/bronze.png"></div>
+      <div class="col disable" ng-click="postPhoto()"><img src="img/award/post-photo/bronze.png"></div>
+    </div>
+    <!-- Post text and badge -->
+    <div class="row">
+      <div class="col disable" ng-click="postVideo()"><img src="img/award/post-video/bronze.png"></div>
+      <div class="col disable" ng-click="postText()"><img src="img/award/post-text/bronze.png"></div>
+      <div class="col disable" ng-click="_badge()"><img src="img/award/badge/bronze.png"></div>
+      <div class="col disable" ng-click="hastag()"><img src="img/award/hastag/bronze.png"></div>
+      <div class="col disable" ng-click="visitProfile()"><img src="img/award/visit-profile/bronze.png"></div>
+    </div>
+  </div>
+</div>
+</ion-content>
+</ion-view>

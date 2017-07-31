@@ -1,0 +1,236 @@
+<ion-view view-title="My Team" title-center cache-view="true">
+<!-- Back Button -->
+<ion-nav-buttons side="left">
+<button class="button button-clear icon-button mdi mdi-chevron-left" ng-click="back()" style="font-size:25px"></button>
+</ion-nav-buttons>
+<!-- Right button -->
+<ion-nav-buttons side="right">
+<!-- Filter button -->
+<a ng-href="#/app/search">
+  <button class="button button-clear icon-button mdi mdi-magnify button-search" style="min-height:0;font-size:25px"></button>
+</a>
+</ion-nav-buttons>
+<!-- Fake button -->
+<button ng-click="searchbutton = !searchbutton; filterbutton = false" id="searchbutton" style="display:none"></button>
+<button ng-click="filterbutton = !filterbutton; searchbutton = false" id="filterbutton" style="display:none"></button>
+<!-- Search bar -->
+<div class="bar item-input-inset" style="border:none;margin-top:58px;margin-bottom:100px;position: fixed" ng-show="searchbutton">
+  <i class="icon ion-ios-search placeholder-icon" style="background:white; height:56px; padding-top:16px; padding-left:11px;"></i><input id="search" type="text" placeholder=" Search..." ng-model="search" style="width:100%; height:60px;" />
+</div>
+<!-- Shadow space -->
+<div class="bar item-input-inset" style="border:none;box-shadow: 0 1px 2px #aaa"></div>
+<ion-content overflow-scroll=false scroll-sista="tabs" style="background-color: #ffffff; z-index:0; margin-top:12px;">
+<!-- for refresh -->
+<ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()" refreshing-text="Fetching ..." refreshing-icon="ion-loading-b"></ion-refresher>
+<div class="row" ng-init="showme = 1" style="padding:0px;" ng-hide="isCoach == true" ng-show="isCoach == false">
+    <button class="col mdi mdi-account-multiple" ng-click="showme=1" ng-class="{'activeIcon':showme == 1}"style="font-size:20px;color:#897777;padding:10px;background-color:white;border:none;border-bottom:1px solid #e0dfdf;"></button>
+    <!-- <div class="col cursor" style="text-align:center;background-color:white;border-right:#ebebeb 1px solid;" ng-click="showme=1" ng-class="{'active':showme == 1}">Member</div> -->
+    <button class=" col mdi mdi-calendar" ng-click="showme=2" ng-class="{'activeIcon':showme == 2}"style="font-size:20px;color:#897777;padding:10px;background-color:white;border:none;border-bottom:1px solid #e0dfdf;"></button>
+    <!-- <div class="col cursor" style="text-align:center;background-color:white;border-right:#ebebeb 1px solid;" ng-click="showme=2" ng-class="{'active':showme == 2}">Schedule</div> -->
+    <button class=" col mdi mdi-message" ng-click="showme=3" ng-class="{'activeIcon':showme == 3}"style="font-size:20px;color:#897777;padding:10px;background-color:white;border:none;border-bottom:1px solid #e0dfdf;"></button>
+    <!-- <div class="col cursor" style="text-align:center;background-color:white;border-right:#ebebeb 1px solid;" ng-click="showme=3" ng-class="{'active':showme == 3}">Chat</div> -->
+</div>
+
+<!-- List of members-->
+<div class="list" ng-show="showme==1">
+  <!-- Coach -->
+  <div ng-show="role == 'Coach'">
+    <!-- <div ng-hide="searchmessage"></div> -->
+    <div class="list" ng-if="teamAlreadyExist == true">
+      <a class="item item-avatar" style="border-bottom:2px solid #f0efef;">
+       <!--  <img src="img/emblem.jpg" style="background-color:#4DB6AC";> -->
+        
+          <h4 style="background-color: #4DB6AC;color: white;height: 40px;width: 40px;text-align: center;padding-top: 12px;border-radius: 50%;margin-left: -80px;margin-bottom: -40px;">{{teamAcronym}}</h4>
+        
+        <div style="padding-top: 3px;height:40px;">
+        <h2 style="margin-left: -26px">{{myTeam.team_name}}</h2>
+        <p style="margin-left: -26px; margin-top: -2px;">{{myTeam.team_coach}} (coach)</p>
+        <button class="button button-clear icon-button mdi mdi-chevron-right" ng-click="goToTeamDetail(myTeam.id)" style="font-size:20px;color:black;margin-top:-65px;margin-left:210px;"></button>
+        </div>
+      </a>
+    </div>
+
+    <p style="text-align: center; padding:10px; margin-top:250px; font-size: 18px;" ng-if="teamAlreadyExist == false">No Team Yet</p>
+  </div>
+  <!-- Coach -->
+
+  <!-- Player -->
+  <div ng-show="role == 'Player'">
+  <!--   <div ng-hide="searchmessage"></div> -->
+  <!-- Data of members -->
+    <h4 style="font-size: 18px; background-color: aliceblue; margin: 0px; padding: 4px;">Team Invitation</h4>
+    <a ng-show="NoInvitation == false" ng-repeat="data in teamInvitationArr" class="item item-avatar" style="border-bottom:2px solid #f0efef;">
+      <img src="img/profile3.png">
+      <div style="padding-top: 3px;height:40px;">
+      <h2 style="margin-left: -26px">{{data.team_name}}</h2>
+      <p style="margin-left: -26px; margin-top: -2px;">{{data.team_coach}}</p>
+      <p style="font-size:14px;color:black;margin-top:-32px;margin-left:160px;" ng-click="addUserToTeamSquad('{{data.team_name}}')">Accept</p>
+      <p style="font-size:14px;color:black;margin-top:-22px;margin-left:212px;border-left: 1px solid #4db6ac; padding-left: 8px;" ng-click="delUserFromInvitedMember('{{data.team_name}}')">Cancel</p>
+      </div>
+    </a>
+
+     <a ng-show="NoInvitation == true" class="item item-avatar" style="padding: 10px; margin-top:50px; text-align: center;">
+        <p style="font-size: 18px;">No Invitation Yet</p>
+    </a>
+
+    <!-- List of members-->
+    <div class="list" ng-show="showme==1" ng-if="requestedTeam==true">
+      <!-- Data of members -->
+      <h4 style="font-size: 18px; background-color: aliceblue; margin: 0px; padding: 4px;">Requested Team</h4>
+      <a ng-repeat="data in requestedTeamArr" class="item item-avatar" style="border-bottom:2px solid #f0efef;">
+        <img src="img/profile3.png">
+        <div style="padding-top: 3px;height:40px;">
+        <h2 style="margin-left: -26px">{{data}}</h2>
+        <p style="margin-left: -26px; margin-top: -2px;">Coach</p>
+        <p style="font-size:14px;color:black;margin-top:-32px;margin-left:160px;">waiting respond</p>
+        </div>
+      </a>
+    </div>
+
+    <div ng-show="showme==1" ng-if="joinTeam==false">
+      <h4 style="text-align: center;margin-top: 180px;padding: 4px;">Not joining a team Yet</h4>
+    </div>
+    <!-- List of Member -->
+
+  </div>
+  <!-- Player -->
+</div>
+
+<!-- List of schedules-->
+<div class="list" ng-show="showme==2">
+  <!-- White area -->
+  <div ng-hide="searchmessage"></div>
+  <!-- Data of schedules -->
+  <a class="item item-avatar" style="border-bottom:2px solid #f0efef;padding-bottom:3px;">
+    <div class="row">
+      <div class="col" style="margin-left:-90px;margin-top:-20px;margin-right:30px;">
+        <center>
+          <div style="width:45px;height:25px;background-color:#4db6ac;padding-top:4px;margin-top:20px;border-top-left-radius:2px;border-top-right-radius:2px;">
+            <p style="color:#ffffff; text-align:center; font-size:16px;">Sun</p>
+          </div>
+        <center>
+        <div style="width:45px;height:30px;background-color:#ffffff;padding-top:4px;border:1px solid #d1d0d0;border-bottom-left-radius:2px;border-bottom-right-radius:20px;">
+          <p style="color:#444; text-align:center; font-size:16px; margin:0px;">09</p>
+        </div>
+      </div>
+      <div class="col">
+        <div style="padding-top: 3px;height:40px;">
+        <h2 style="margin-left: -26px">Arsenal vs City</h2>
+        <p style="margin-left: -26px; margin-top: -2px;">Sun 09 Apr @ 02:00 PM</p>
+        <button class="button button-clear icon-button mdi mdi-chevron-right" ng-click="more()" style="font-size:20px;color:black;margin-top:-65px;margin-left:210px;"></button>
+        </div>
+      </div>
+    </div>
+  </a>
+  <a class="item item-avatar" style="border-bottom:2px solid #f0efef;padding-bottom:3px;">
+    <div class="row">
+      <div class="col" style="margin-left:-90px;margin-top:-20px;margin-right:30px;">
+        <center>
+          <div style="width:45px;height:25px;background-color:#4db6ac;padding-top:4px;margin-top:20px;border-top-left-radius:2px;border-top-right-radius:2px;">
+            <p style="color:#ffffff; text-align:center; font-size:16px;">Sun</p>
+          </div>
+        <center>
+        <div style="width:45px;height:30px;background-color:#ffffff;padding-top:4px;border:1px solid #d1d0d0;border-bottom-left-radius:2px;border-bottom-right-radius:20px;">
+          <p style="color:#444; text-align:center; font-size:16px; margin:0px;">09</p>
+        </div>
+      </div>
+      <div class="col">
+        <div style="padding-top: 3px;height:40px;">
+        <h2 style="margin-left: -26px">Arsenal vs City</h2>
+        <p style="margin-left: -26px; margin-top: -2px;">Sun 09 Apr @ 02:00 PM</p>
+        <button class="button button-clear icon-button mdi mdi-chevron-right" ng-click="back()" style="font-size:20px;color:black;margin-top:-65px;margin-left:210px;"></button>
+        </div>
+      </div>
+    </div>
+  </a>
+  <a class="item item-avatar" style="border-bottom:2px solid #f0efef;padding-bottom:3px;">
+    <div class="row">
+      <div class="col" style="margin-left:-90px;margin-top:-20px;margin-right:30px;">
+        <center>
+          <div style="width:45px;height:25px;background-color:#4db6ac;padding-top:4px;margin-top:20px;border-top-left-radius:2px;border-top-right-radius:2px;">
+            <p style="color:#ffffff; text-align:center; font-size:16px;">Sun</p>
+          </div>
+        <center>
+        <div style="width:45px;height:30px;background-color:#ffffff;padding-top:4px;border:1px solid #d1d0d0;border-bottom-left-radius:2px;border-bottom-right-radius:20px;">
+          <p style="color:#444; text-align:center; font-size:16px; margin:0px;">09</p>
+        </div>
+      </div>
+      <div class="col">
+        <div style="padding-top: 3px;height:40px;">
+        <h2 style="margin-left: -26px">Arsenal vs City</h2>
+        <p style="margin-left: -26px; margin-top: -2px;">Sun 09 Apr @ 02:00 PM</p>
+        <button class="button button-clear icon-button mdi mdi-chevron-right" ng-click="more()" style="font-size:20px;color:black;margin-top:-65px;margin-left:210px;"></button>
+        </div>
+      </div>
+    </div>
+  </a>
+  <a class="item item-avatar" style="border-bottom:2px solid #f0efef;padding-bottom:3px;">
+    <div class="row">
+      <div class="col" style="margin-left:-90px;margin-top:-20px;margin-right:30px;">
+        <center>
+          <div style="width:45px;height:25px;background-color:#4db6ac;padding-top:4px;margin-top:20px;border-top-left-radius:2px;border-top-right-radius:2px;">
+            <p style="color:#ffffff; text-align:center; font-size:16px;">Sun</p>
+          </div>
+        <center>
+        <div style="width:45px;height:30px;background-color:#ffffff;padding-top:4px;border:1px solid #d1d0d0;border-bottom-left-radius:2px;border-bottom-right-radius:20px;">
+          <p style="color:#444; text-align:center; font-size:16px; margin:0px;">09</p>
+        </div>
+      </div>
+      <div class="col">
+        <div style="padding-top: 3px;height:40px;">
+        <h2 style="margin-left: -26px">Arsenal vs City</h2>
+        <p style="margin-left: -26px; margin-top: -2px;">Sun 09 Apr @ 02:00 PM</p>
+        <button class="button button-clear icon-button mdi mdi-chevron-right" ng-click="more()" style="font-size:20px;color:black;margin-top:-65px;margin-left:210px;"></button>
+        </div>
+      </div>
+    </div>
+  </a>
+  <a class="item item-avatar" style="border-bottom:2px solid #f0efef;padding-bottom:3px;">
+    <div class="row">
+      <div class="col" style="margin-left:-90px;margin-top:-20px;margin-right:30px;">
+        <center>
+          <div style="width:45px;height:25px;background-color:#4db6ac;padding-top:4px;margin-top:20px;border-top-left-radius:2px;border-top-right-radius:2px;">
+            <p style="color:#ffffff; text-align:center; font-size:16px;">Sun</p>
+          </div>
+        <center>
+        <div style="width:45px;height:30px;background-color:#ffffff;padding-top:4px;border:1px solid #d1d0d0;border-bottom-left-radius:2px;border-bottom-right-radius:20px;">
+          <p style="color:#444; text-align:center; font-size:16px; margin:0px;">09</p>
+        </div>
+      </div>
+      <div class="col">
+        <div style="padding-top: 3px;height:40px;">
+        <h2 style="margin-left: -26px">Arsenal vs City</h2>
+        <p style="margin-left: -26px; margin-top: -2px;">Sun 09 Apr @ 02:00 PM</p>
+        <button class="button button-clear icon-button mdi mdi-chevron-right" ng-click="more()" style="font-size:20px;color:black;margin-top:-65px;margin-left:210px;"></button>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+<!-- List of chats-->
+<div class="list" ng-show="showme==3" ng-click="getTeamSquad()">
+  <!-- White area -->
+  <div ng-hide="searchmessage"></div>
+  <!-- Data of chats -->
+  <a ng-repeat="data in teamSquadArr" class="item item-avatar" style="border-bottom:2px solid #f0efef;" ng-click="goToChatDetail('{{data.username}}')">
+   <img src="img/profile3.png">
+    <div style="padding-top: 3px;height:40px;">
+    <h2 style="margin-left: -26px; width:100px;">{{data.username}}</h2>
+    <p style="margin-left: -26px; margin-top: -2px;">{{data.email}}</p>
+    <p style="margin-left: 200px; margin-top: -40px;">10:00 PM</p>
+    </div>
+  </a>
+</div>
+<!-- White Space -->
+<div style="height:55px;background:transparent" ng-show="searchbutton"></div>
+<div style="height:200px;background:transparent" ng-show="filterbutton"></div>
+<!--List Posting-->
+</ion-content>
+<!--Create Post Button-->
+<ion-buttons ng-if="teamAlreadyExist == false" ng-show="role == 'Coach'" start id="floating-button" style="margin-right:10px; background-color:#4DB6AC;padding-top: 6px" ng-click="createTeam()">
+<i class="icon mdi mdi-plus" style="font-size:40px;"></i>
+</ion-buttons>
+<ion-buttons ng-show="role == 'Player'" start id="floating-button" style="margin-right:10px; background-color:#4DB6AC;padding-top: 6px" ng-click="searchTeam()">
+<i class="icon mdi mdi-plus" style="font-size:40px;"></i>
+</ion-buttons>
+</ion-view>

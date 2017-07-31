@@ -1,0 +1,65 @@
+<ion-view view-title="Chat" cache-view="false">
+<!-- Back Button -->
+<ion-nav-buttons side="left">
+<button class="button button-clear icon-button mdi mdi-chevron-left" ng-click="back()" style="font-size:25px"></button>
+</ion-nav-buttons>
+<!-- Right button -->
+<ion-nav-buttons side="right">
+<!-- Search button -->
+<button class="button button-clear icon-button mdi mdi-magnify" onclick="document.getElementById('searchmessage').click()" style="min-height:0;font-size:25px; padding-top:7px;"></button>
+</ion-nav-buttons>
+
+<ion-content overflow-scroll=true scroll-sista="tabs" style="background-color: #F1F5F8;">
+<!-- Tab navigation -->
+<div class="tabs-striped tabs-top tabs-background-positive tabs-color-light bar-subheader" style="box-shadow: 0 1px 2px #aaa">
+  <div class="tabs" style="background:#4DB6AC;top:0px;border:none">
+    <a class="tab-item" ng-click="showme=false" ng-class="{'active':showme == false}">
+      <i class="mdi mdi-message" style="font-size:25px;margin-top: 13px"></i>
+    </a>
+    <a class="tab-item" ng-click="showme=true" ng-class="{'active':showme == true}">
+      <i class="mdi mdi-account-multiple" style="font-size:25px;margin-top: 13px"></i>
+    </a>
+  </div>
+</div>
+<!-- Fake button for search -->
+<button ng-click="searchmessage = !searchmessage; filterbutton = false" id="searchmessage" style="display:none"></button>
+<!-- Search box -->
+<div class="bar item-input-inset" style="border:none; margin-top:5px" ng-show="searchmessage">
+  <i class="icon ion-ios-search placeholder-icon" style="background:white; height:60px; padding-top:16px; padding-left:11px;"></i><input id="search" type="text" placeholder=" Search..." ng-model="search" style="width:100%; height:60px;" />
+</div>
+<!-- List of last messages -->
+<div class="list" ng-hide="showme">
+  <!-- White area -->
+  <div ng-hide="searchmessage"></div>
+  <!-- White space -->
+  <div style="height: 5px"></div>
+  <!-- Data of messages -->
+  <a class="item item-avatar" ng-repeat="data in recentMessage | filter:search" style="border-bottom:2px solid #cecece; background:white;" ng-click="ReadMessage('{{data.id}}','{{menuProfile.username}}','{{data.receiver}}')">
+    <img src="{{data.photo}}">
+    <div style="padding-top: 3px">
+    <h2 style="margin-left: -26px;" ng-hide="data.receiver_name === menuProfile.username">{{data.receiver_name}}</h2>
+    <h2 style="margin-left: -26px;" ng-show="data.receiver_name === menuProfile.username">{{data.sender_name}}</h2>
+    <p style="margin-left: -26px; margin-top: -2px;">{{data.content}}</p>
+    </div>
+    <i class="mdi mdi-checkbox-blank-circle pull-right" ng-hide="data.read === menuProfile.username || data.sender === menuProfile.username" style="color: #24afe5; margin-top: -27px;"></i>
+  </a>
+</div>
+<!-- List of contacts-->
+<div class="list" ng-show="showme">
+  <!-- White area -->
+  <div ng-hide="searchmessage"></div>
+  <!-- White space -->
+  <div style="height: 5px"></div>
+  <!-- Data of contacts -->
+  <a ng-repeat="data in arrContacts | filter:search" ng-show="data.username !== menuProfile.username" class="item item-avatar" style="border-bottom:2px solid #cecece; background:white;" ng-click="userDetail('{{data.username}}')">
+    <img src="{{data.photo}}">
+    <div style="padding-top: 3px">
+    <h2 style="margin-left: -26px" ng-class="{'pink':data.name == 'Arief Mulya Utama'}">{{data.name}}</h2>
+    <p style="margin-left: -26px; margin-top: -2px;">{{data.division}}</p>
+    </div>
+  </a>  
+</div>
+</ion-content>
+</ion-view>
+
+

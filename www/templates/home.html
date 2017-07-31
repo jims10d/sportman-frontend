@@ -1,0 +1,162 @@
+<ion-view view-title="Home" title-center cache-view="true">
+<!-- Right button -->
+<ion-nav-buttons side="right">
+<!-- Filter button -->
+<a ng-href="#/app/search">
+  <button class="button button-clear icon-button mdi mdi-magnify button-search" style="min-height:0;font-size:25px"></button>
+</a>
+</ion-nav-buttons>
+<!-- Fake button -->
+<button ng-click="searchbutton = !searchbutton; filterbutton = false" id="searchbutton" style="display:none"></button>
+<button ng-click="filterbutton = !filterbutton; searchbutton = false" id="filterbutton" style="display:none"></button>
+<!-- Search bar -->
+<div class="bar item-input-inset" style="border:none;margin-top:58px;margin-bottom:100px;position: fixed" ng-show="searchbutton">
+  <i class="icon ion-ios-search placeholder-icon" style="background:white; height:56px; padding-top:16px; padding-left:11px;"></i><input id="search" type="text" placeholder=" Search..." ng-model="search" style="width:100%; height:60px;" />
+</div>
+<!-- Shadow space -->
+<div class="bar item-input-inset" style="border:none;box-shadow: 0 1px 2px #aaa"></div>
+<ion-content overflow-scroll=true scroll-sista="tabs" style="background-color: #ececec; z-index:0; margin-top:12px;">
+<!-- for refresh -->
+<ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()" refreshing-text="Fetching ..." refreshing-icon="ion-loading-b"></ion-refresher>
+<div class="row" style="padding:0px;">
+      <div class="col col-50 cursor" style="text-align:center;background-color:white;border-right:#e8e3e3 1px solid;">Live (0)</div>
+      <div class="col cursor" style="text-align:center;background-color:white;"><</div>
+      <div class="col cursor" style="text-align:center;background-color:white;">Today</div>
+      <div class="col cursor" style="text-align:center;background-color:white;">></div>
+    </div>
+<div class="card" style="margin-bottom:10px;" ng-show="menuProfile.role == 'Organizer' || menuProfile.role == 'Player'">
+  <div class="item item-divider" style="padding:0px;">
+    <p style="background-color:#4DB6AC;padding-left:10px;font-weight:bold;color:white;"> Europe - WC Qualification Europe Org</p>
+  </div>
+  <div class="item item-text-wrap" style="padding:0px;">
+    <div class="row" ng-repeat="data in matches" style="border-bottom: #e8e3e3 1px solid;margin:0px;">
+      <div ng-show="data.match_started == true" ng-hide="data.match_started == null" ng-click="editMatch('{{data.id}}')" style="color:#4DB6AC;width:30px;margin-right:-27px;margin-top: 5px;"><img src="img/gif/flash.gif" style="display: inline;margin-top: 2px;margin-right: 3px;">{{data.timer}}'</div>
+      <div class="col" style="text-align:right;">{{data.match_homeTeam}}</div>
+      <div ng-show="data.match_time == '18:00'" ng-click="editMatch('{{data.id}}')" style="text-align:center;color:#4DB6AC;width: 70px;margin-top: 5px;">set</div>
+      <div ng-show="data.match_time != '18:00'" ng-hide="data.match_time == '18:00' || data.match_started == true" ng-if="data.match_started != 'true'" ng-click="editMatch('{{data.id}}')" style="text-align:center;color:#4DB6AC;width: 70px;margin-top: 5px;">{{data.match_time}}</div>
+      <div ng-show="data.match_started == true" ng-hide="data.match_started == null" ng-click="editMatch('{{data.id}}')" style="text-align:center;color:#4DB6AC;width: 20px;margin-top: 5px;">{{data.match_homeScore}}</div>
+      <div ng-show="data.match_started == true" ng-hide="data.match_started == null" ng-click="editMatch('{{data.id}}')" style="text-align:center;color:#4DB6AC;width: 10px;margin-top: 5px;">-</div>
+      <div ng-show="data.match_started == true" ng-hide="data.match_started == null" ng-click="editMatch('{{data.id}}')" style="text-align:center;color:#4DB6AC;width: 20px;margin-top: 5px;">{{data.match_awayScore}}</div>
+      <div class="col" style="text-align:left;">{{data.match_awayTeam}}</div>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:10px;" ng-show="menuProfile.role == 'Referee'">
+  <div class="item item-divider" style="padding:0px;">
+    <p style="background-color:#4DB6AC;padding-left:10px;font-weight:bold;color:white;"> Europe - WC Qualification Europe Ref</p>
+  </div>
+  <div class="item item-text-wrap" style="padding:0px;">
+    <div class="row" ng-repeat="data in matches" style="border-bottom: #e8e3e3 1px solid;margin:0px;">
+      <div class="col" style="text-align:right;">{{data.match_homeTeam}}</div>
+      <div ng-show="data.match_time != '18:00'" ng-hide="data.match_time == '18:00' || data.match_started == true" ng-if="data.match_started != 'true'" style="text-align:center;color:#4DB6AC;width: 70px;margin-top: 5px;">{{data.match_time}}</div>
+      <div ng-show="data.match_started == true" ng-hide="data.match_started == null" ng-click="liveScore('{{data.id}}')" style="text-align:center;color:#4DB6AC;width: 70px;margin-top: 5px;">Start</div>
+      <div class="col" style="text-align:left;">{{data.match_awayTeam}}</div>
+    </div>
+  </div>
+</div>
+<!-- <div class="card" style="margin-bottom:10px;">
+  <div class="item item-divider" style="padding:0px;">
+    <p style="background-color:#4DB6AC;padding-left:10px;font-weight:bold;color:white;"> Europe - WC Qualification Europe </p>
+  </div>
+  <div class="item item-text-wrap" style="padding:0px;">
+    <div class="row" style="border-bottom: #e8e3e3 1px solid;margin:0px;">
+      <div class="col" style="text-align:right;">Armenia</div>
+      <div class="col" style="text-align:center;color:#4DB6AC;">00:00</div>
+      <div class="col" style="text-align:left;">Montenegro</div>
+    </div>
+  </div>
+</div>
+<div class="card" style="margin-bottom:10px;">
+  <div class="item item-divider" style="padding:0px;">
+    <p style="background-color:#4DB6AC;padding-left:10px;font-weight:bold;color:white;"> Europe - WC Qualification Europe </p>
+  </div>
+  <div class="item item-text-wrap" style="padding:0px;">
+    <div class="row" style="border-bottom: #e8e3e3 1px solid;margin:0px;">
+      <div class="col" style="text-align:right;">Armenia</div>
+      <div class="col" style="text-align:center;color:#4DB6AC;">00:00</div>
+      <div class="col" style="text-align:left;">Montenegro</div>
+    </div>
+    <div class="row" style="border-bottom: #e8e3e3 1px solid;margin:0px;">
+      <div class="col" style="text-align:right;">France</div>
+      <div class="col" style="text-align:center;color:#4DB6AC;">19:30</div>
+      <div class="col" style="text-align:left;">Italia</div>
+    </div>
+    <div class="row" style="border-bottom: #e8e3e3 1px solid;margin:0px;">
+      <div class="col" style="text-align:right;">Portugal</div>
+      <div class="col" style="text-align:center;color:#4DB6AC;">21:00</div>
+      <div class="col" style="text-align:left;">Wales</div>
+    </div>
+    <div class="row" style="border-bottom: #e8e3e3 1px solid;margin:0px;">
+      <div class="col" style="text-align:right;">Armenia</div>
+      <div class="col" style="text-align:center;color:#4DB6AC;">00:00</div>
+      <div class="col" style="text-align:left;">Montenegro</div>
+    </div>
+    <div class="row" style="border-bottom: #e8e3e3 1px solid;margin:0px;">
+      <div class="col" style="text-align:right;">France</div>
+      <div class="col" style="text-align:center;color:#4DB6AC;">19:30</div>
+      <div class="col" style="text-align:left;">Italia</div>
+    </div>
+    <div class="row" style="border-bottom: #e8e3e3 1px solid;margin:0px;">
+      <div class="col" style="text-align:right;">Portugal</div>
+      <div class="col" style="text-align:center;color:#4DB6AC;">21:00</div>
+      <div class="col" style="text-align:left;">Wales</div>
+    </div>
+  </div>
+</div>
+<div class="card" style="margin-bottom:10px;">
+  <div class="item item-divider" style="padding:0px;">
+    <p style="background-color:#4DB6AC;padding-left:10px;font-weight:bold;color:white;"> Europe - WC Qualification Europe </p>
+  </div>
+  <div class="item item-text-wrap" style="padding:0px;">
+    <div class="row" style="border-bottom: #e8e3e3 1px solid;margin:0px;">
+      <div class="col" style="text-align:right;">Armenia</div>
+      <div class="col" style="text-align:center;color:#4DB6AC;">00:00</div>
+      <div class="col" style="text-align:left;">Montenegro</div>
+    </div>
+  </div>
+</div>
+<div class="card" style="margin-bottom:10px;">
+  <div class="item item-divider" style="padding:0px;">
+    <p style="background-color:#4DB6AC;padding-left:10px;font-weight:bold;color:white;"> Europe - WC Qualification Europe </p>
+  </div>
+  <div class="item item-text-wrap" style="padding:0px;">
+    <div class="row" style="border-bottom: #e8e3e3 1px solid;margin:0px;">
+      <div class="col" style="text-align:right;">Armenia</div>
+      <div class="col" style="text-align:center;color:#4DB6AC;">00:00</div>
+      <div class="col" style="text-align:left;">Montenegro</div>
+    </div>
+    <div class="row" style="border-bottom: #e8e3e3 1px solid;margin:0px;">
+      <div class="col" style="text-align:right;">France</div>
+      <div class="col" style="text-align:center;color:#4DB6AC;">19:30</div>
+      <div class="col" style="text-align:left;">Italia</div>
+    </div>
+    <div class="row" style="border-bottom: #e8e3e3 1px solid;margin:0px;">
+      <div class="col" style="text-align:right;">Portugal</div>
+      <div class="col" style="text-align:center;color:#4DB6AC;">21:00</div>
+      <div class="col" style="text-align:left;">Wales</div>
+    </div>
+    <div class="row" style="border-bottom: #e8e3e3 1px solid;margin:0px;">
+      <div class="col" style="text-align:right;">Armenia</div>
+      <div class="col" style="text-align:center;color:#4DB6AC;">00:00</div>
+      <div class="col" style="text-align:left;">Montenegro</div>
+    </div>
+    <div class="row" style="border-bottom: #e8e3e3 1px solid;margin:0px;">
+      <div class="col" style="text-align:right;">France</div>
+      <div class="col" style="text-align:center;color:#4DB6AC;">19:30</div>
+      <div class="col" style="text-align:left;">Italia</div>
+    </div>
+    <div class="row" style="border-bottom: #e8e3e3 1px solid;margin:0px;">
+      <div class="col" style="text-align:right;">Portugal</div>
+      <div class="col" style="text-align:center;color:#4DB6AC;">21:00</div>
+      <div class="col" style="text-align:left;">Wales</div>
+    </div>
+  </div>
+</div> -->
+<!-- <div id="map"></div> -->
+<!-- White Space -->
+<div style="height:55px;background:transparent" ng-show="searchbutton"></div>
+<div style="height:200px;background:transparent" ng-show="filterbutton"></div>
+<!--List Posting-->
+</ion-content>
+</ion-view>
